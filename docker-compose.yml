@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+
+  mempool:
+#    container_name: listener
+    build:
+      dockerfile: src/Dockerfile
+      context: .
+    image: mempool-listener
+    ports:
+      - "12000"
+    restart: always
