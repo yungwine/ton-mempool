@@ -1,1 +1,1 @@
-pytoniq==0.1.16
+pytoniq==0.1.17
