@@ -1,1 +1,3 @@
-pytoniq==0.1.17
+pytoniq @ git+https://github.com/yungwine/pytoniq@rldp
+pyraptorq>=0.1.0
+websockets==12.0

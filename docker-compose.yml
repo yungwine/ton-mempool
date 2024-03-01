@@ -4,10 +4,13 @@ services:
 
   mempool:
 #    container_name: listener
+    env_file:
+      - .env
     build:
       dockerfile: src/Dockerfile
       context: .
     image: mempool-listener
     ports:
+      - "${WS_PORT}:8765"
       - "12000"
     restart: always

@@ -1,23 +1,39 @@
-import datetime
-import logging
-import time
+import hashlib
 
-from pytoniq_core import MessageAny, Cell
+import websockets
+from pytoniq import LiteBalancer
+import time
+from .ws import connected
 
 
 messages = {}
+client = LiteBalancer.from_mainnet_config(2)
+counter = 0
 
 
-# this function can be async as well
-def process_external_message(data: dict):
-    message_cell = Cell.one_from_boc(data['data']['message']['data'])
-    msg = MessageAny.deserialize(message_cell.begin_parse())
-    if message_cell.hash not in messages:
-        print('EXTERNAL', datetime.datetime.now(), f'https://tonviewer.com/{msg.info.dest.to_str()}')
-        messages[message_cell.hash] = time.time()
+async def broadcast(message):
+    for websocket in connected.copy():
+        try:
+            await websocket.send(message)
+        except websockets.ConnectionClosed:
+            pass
+
+
+# this function can be sync as well
+async def process_external_message(data: dict, *args, **kwargs):
+    global counter
+    counter += 1
+    if not counter % 500:
+        print(f'GOT {counter} msgs')
+
+    await broadcast(message=data['message']['data'])
+
+    messages[hashlib.sha256(data['message']['data'])] = time.time()
 
     # clear cache
 
     for m, t in list(messages.items()):
         if t + 300 < time.time():
             messages.pop(m)
+
+    return data

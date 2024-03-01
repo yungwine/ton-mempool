@@ -186,3 +186,5 @@ fabric.properties
 /main.py
 /key.txt
 /my_peers.py
+/key.txt
+/feats/
