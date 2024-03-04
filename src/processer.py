@@ -1,4 +1,5 @@
 import hashlib
+import json
 
 import websockets
 from pytoniq import LiteBalancer
@@ -14,12 +15,11 @@ counter = 0
 async def broadcast(message):
     for websocket in connected.copy():
         try:
-            await websocket.send(message)
+            await websocket.send(json.dumps({'type': 'external', 'data': message.hex()}).encode())
         except websockets.ConnectionClosed:
             pass
 
 
-# this function can be sync as well
 async def process_external_message(data: dict, *args, **kwargs):
     global counter
     counter += 1

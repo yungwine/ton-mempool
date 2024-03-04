@@ -36,6 +36,20 @@ async def start_up(
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
+    WORKCHAIN = int(os.getenv('WORKCHAIN', 0))
+    NETWORK = os.getenv('NETWORK', 'mainnet')
+    if NETWORK == 'mainnet':
+        overlay_id = OverlayTransport.get_mainnet_overlay_id(workchain=WORKCHAIN)
+    elif NETWORK == 'testnet':
+        overlay_id = OverlayTransport.get_testnet_overlay_id(workchain=WORKCHAIN)
+    else:
+        ZERO_STATE_FILE_HASH = os.getenv('ZERO_STATE_FILE_HASH')
+        if ZERO_STATE_FILE_HASH is None:
+            raise ValueError('ZERO_STATE_FILE_HASH is not set')
+        overlay_id = OverlayTransport.get_overlay_id(ZERO_STATE_FILE_HASH, workchain=WORKCHAIN)
+
+    print('Overlay ID:', overlay_id)
+
     files = os.listdir('.')
     if 'key.txt' not in files:
         with open('key.txt', 'wb') as f:
@@ -47,7 +61,6 @@ if __name__ == '__main__':
 
     overlay = OverlayTransport(
         private_key=key,
-        local_address=('0.0.0.0', 12000),
         overlay_id=OverlayTransport.get_mainnet_overlay_id(
             workchain=0,
         ),

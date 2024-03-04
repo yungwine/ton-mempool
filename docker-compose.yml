@@ -12,5 +12,4 @@ services:
     image: mempool-listener
     ports:
       - "${WS_PORT}:8765"
-      - "12000"
     restart: always
