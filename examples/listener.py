@@ -26,6 +26,10 @@ async def check_peers_amount(websocket):
     await websocket.send(json.dumps({'type': 'get_peers_amount'}).encode())
 
 
+async def subscribe_to_externals(websocket):
+    await websocket.send(json.dumps({'type': 'subscribe', 'data': 'external'}).encode())
+
+
 async def listener():
     PORT = os.getenv("PORT", 8765)
     uri = f"ws://localhost:{PORT}"
@@ -33,6 +37,7 @@ async def listener():
         async with websockets.connect(uri) as websocket:
             try:
                 await check_peers_amount(websocket)
+                await subscribe_to_externals(websocket)
                 while True:
                     ext = await websocket.recv()
                     await process(ext)  # pass your processor here

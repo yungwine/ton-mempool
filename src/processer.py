@@ -4,7 +4,7 @@ import json
 import websockets
 from pytoniq import LiteBalancer
 import time
-from .ws import connected
+from .ws import externals
 
 
 messages = {}
@@ -13,7 +13,7 @@ counter = 0
 
 
 async def broadcast(message):
-    for websocket in connected.copy():
+    for websocket in externals.copy():
         try:
             await websocket.send(json.dumps({'type': 'external', 'data': message.hex()}).encode())
         except websockets.ConnectionClosed:
