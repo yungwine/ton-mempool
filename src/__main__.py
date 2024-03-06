@@ -61,9 +61,7 @@ if __name__ == '__main__':
 
     overlay = OverlayTransport(
         private_key=key,
-        overlay_id=OverlayTransport.get_mainnet_overlay_id(
-            workchain=0,
-        ),
+        overlay_id=overlay_id,
         timeout=10,
         allow_fec=True
     )
