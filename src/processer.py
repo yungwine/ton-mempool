@@ -33,7 +33,7 @@ async def process_external_message(data: dict, *args, **kwargs):
     # clear cache
 
     for m, t in list(messages.items()):
-        if t + 300 < time.time():
+        if t + 60 < time.time():
             messages.pop(m)
 
     return data

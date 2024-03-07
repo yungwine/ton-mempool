@@ -31,7 +31,7 @@ async def subscribe_to_externals(websocket):
 
 
 async def listener():
-    PORT = os.getenv("PORT", 8765)
+    PORT = os.getenv("WS_PORT", 8765)
     uri = f"ws://localhost:{PORT}"
     while True:
         async with websockets.connect(uri) as websocket:
