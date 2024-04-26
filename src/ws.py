@@ -8,6 +8,7 @@ from websockets.server import serve
 
 
 externals = set()
+blocks = set()
 
 
 async def handler(websocket):
@@ -21,8 +22,8 @@ async def handler(websocket):
         if message['type'] == 'subscribe':
             if message['data'] == 'external':
                 externals.add(websocket)
-            else:
-                pass  # todo blocks
+            elif message['data'] == 'block':
+                blocks.add(websocket)
         elif message['type'] == 'send_external':
             await shard_node.send_external_message(bytes.fromhex(message['data']))
         elif message['type'] == 'get_peers_amount':

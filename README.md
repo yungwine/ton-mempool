@@ -6,7 +6,7 @@ TON Blockchain MemPool listener is a simple tool that runs a websocket server wh
 * send [external messages](https://docs.ton.org/develop/smart-contracts/guidelines/external-messages)
 directly to the [overlay](https://docs.ton.org/learn/networking/overlay-subnetworks)
 * listen to external messages coming to the blockchain
-* listen to new blocks before their application (will be implemented soon).
+* listen to new blocks before their application.
 
 ## Installation
 
@@ -61,14 +61,16 @@ Then you need to wait until the `Overlay Client` find the peers and connect to t
 
 * `{'type': 'get_peers_amount'}` - get peers amount server knows. 
 * `{'type': 'subscribe', 'data': 'external'}` - subscribe to external messages. 
+* `{'type': 'subscribe', 'data': 'block'}` - subscribe to blocks.
 * `{'type': 'send_external', 'data': hex_boc}` - send external message to the network.
 
 ### Receive messages
 
 * `{"type": "get_peers_amount", "answer": {"amount": peers_amount}}` - amount of peers.
 * `{'type': 'external', 'data': hex_boc}` - new external message found in mempool.
+* `{'type': 'block', 'data': {'id': BlockIdExt, 'data': hex_boc}}` - new block found in mempool.
 
-### What can I do with messages I receive?
+### What can I do with external messages I receive?
 
 The server sends you `external messages` as bocs. After deserializing you will get a Cell serialized as `Message Any` TL-b scheme.
 This structure contains message info and body. Most likely you want to know what events will be triggered by this message, 
