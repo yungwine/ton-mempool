@@ -3,7 +3,7 @@ import logging
 import os
 
 from .ws import run_websocket
-from .processer import process_external_message
+from .processer import process_external_message, process_block
 
 from pytoniq.adnl import OverlayTransport, DhtClient, AdnlTransport
 from pytoniq.adnl.overlay import ShardOverlay, OverlayManager
@@ -28,7 +28,12 @@ async def start_up(
     manager = OverlayManager(overlay, dht, max_peers=30)
     await manager.start()
     await asyncio.sleep(15)
-    shard_node = ShardOverlay(manager, external_messages_handler=process_external_message, shard_blocks_handler=lambda i, j: print(i))
+    shard_node = ShardOverlay(
+        manager,
+        external_messages_handler=process_external_message,
+        shard_blocks_handler=process_block,
+        blocks_handler=process_block
+    )
     # await asyncio.sleep(150)
     logger.info('Starting websocket.')
     await run_websocket(shard_node)
