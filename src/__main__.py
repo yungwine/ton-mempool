@@ -41,7 +41,7 @@ async def start_up(
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    WORKCHAIN = int(os.getenv('WORKCHAIN', -1))
+    WORKCHAIN = int(os.getenv('WORKCHAIN', 0))
     NETWORK = os.getenv('NETWORK', 'mainnet')
     if NETWORK == 'mainnet':
         overlay_id = OverlayTransport.get_mainnet_overlay_id(workchain=WORKCHAIN)
